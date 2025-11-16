@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .form-container {
+    max-width: 650px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 35px 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.6s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h2 {
+    text-align: center;
+    color: #1976d2;
+    margin-bottom: 25px;
+    font-weight: 700;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s;
+  }
+
+  input:focus,
+  textarea:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 5px rgba(25, 118, 210, 0.4);
+  }
+
+  textarea {
+    resize: none;
+    height: 90px;
+  }
+
+  .btn {
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: 0.3s;
+  }
+
+  .btn:hover {
+    background-color: #0d47a1;
+  }
+
+  .section-title {
+    font-size: 18px;
+    margin-top: 20px;
+    color: #0d47a1;
+    font-weight: bold;
+  }
+</style>
+
+<div class="form-container">
+  <h2>Post Large-Scale Job</h2>
+
+  <form method="POST">
+
+    <!-- Company Details Section -->
+    <div class="section-title">🏢 Company Details</div>
+
+    <label for="company_name">Company Name</label>
+    <input type="text" name="company_name" id="company_name" required>
+
+    <label for="company_address">Company Address</label>
+    <textarea name="company_address" id="company_address" required></textarea>
+
+    <label for="company_website">Company Website</label>
+    <input type="text" name="company_website" id="company_website">
+
+    <label for="company_email">Company Email</label>
+    <input type="email" name="company_email" id="company_email" required>
+
+    <label for="company_phone">Company Phone</label>
+    <input type="text" name="company_phone" id="company_phone" required>
+
+
+    <!-- Job Information Section -->
+    <div class="section-title">📌 Job Information</div>
+
+    <label for="title">Job Title</label>
+    <input type="text" name="title" id="title" required>
+
+    <label for="category">Department / Category</label>
+    <input type="text" name="category" id="category" placeholder="Engineering, HR, etc.">
+
+    <label for="location">Job Location</label>
+    <input type="text" name="location" id="location">
+
+    <label for="salary">Salary Range</label>
+    <input type="text" name="salary" id="salary">
+
+    <label for="qualification">Qualification</label>
+    <input type="text" name="qualification" id="qualification" placeholder="B.Tech, MBA">
+
+    <label for="experience">Experience Required</label>
+    <input type="text" name="experience" id="experience" placeholder="2+ years">
+
+    <label for="benefits">Benefits</label>
+    <textarea name="benefits" id="benefits" placeholder="Health insurance, Work from home"></textarea>
+
+    <label for="description">Job Description</label>
+    <textarea name="description" id="description" required></textarea>
+
+    <button class="btn" type="submit">Post Job</button>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.container-flex {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.info-box {
+    width: 420px;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.info-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1976d2;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #1976d2;
+    padding-bottom: 5px;
+}
+
+.info-row {
+    margin-bottom: 8px;
+}
+
+.label {
+    font-weight: bold;
+    color: #333;
+}
+
+.value {
+    color: #444;
+}
+
+.apply-btn {
+    background: #2563eb;
+    color: white;
+    padding: 12px 26px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 17px;
+    transition: 0.2s;
+}
+
+.apply-btn:hover {
+    background: #1e3a8a;
+}
+</style>
+
+
+<div class="container-flex">
+
+    <!-- ================= JOB DETAILS ================= -->
+    <div class="info-box">
+        <div class="info-title">📝 Job Details</div>
+
+        <div class="info-row"><span class="label">Title:</span> {{ job.title }}</div>
+        <div class="info-row"><span class="label">Category:</span> {{ job.category }}</div>
+        <div class="info-row"><span class="label">Type:</span> {{ job.job_type|capitalize }}</div>
+        <div class="info-row"><span class="label">Location:</span> {{ job.location }}</div>
+        <div class="info-row"><span class="label">Salary:</span> {{ job.salary }}</div>
+
+        {% if job.job_type == "large" %}
+            <div class="info-row"><span class="label">Qualification:</span> {{ job.qualification }}</div>
+            <div class="info-row"><span class="label">Experience:</span> {{ job.experience }}</div>
+            <div class="info-row"><span class="label">Benefits:</span> {{ job.benefits }}</div>
+        {% endif %}
+
+        <div class="info-row"><span class="label">Description:</span> {{ job.description }}</div>
+    </div>
+
+
+    <!-- ================= SMALL JOB SAFETY DETAILS ================= -->
+    {% if job.job_type == "small" %}
+    <div class="info-box">
+        <div class="info-title">🔧 Field & Safety</div>
+
+        <div class="info-row"><span class="label">Salary Type:</span> {{ job.salary_type }}</div>
+        <div class="info-row"><span class="label">Workplace:</span> {{ job.workplace_type }}</div>
+        <div class="info-row"><span class="label">Full Address:</span> {{ job.full_address }}</div>
+        <div class="info-row"><span class="label">Pincode:</span> {{ job.pincode }}</div>
+        <div class="info-row"><span class="label">Risk Level:</span> {{ job.risk_level }}</div>
+        <div class="info-row"><span class="label">Tools Provided:</span> {{ 'Yes' if job.tools_provided else 'No' }}</div>
+        <div class="info-row"><span class="label">Food:</span> {{ 'Yes' if job.food_provided else 'No' }}</div>
+        <div class="info-row"><span class="label">Stay:</span> {{ 'Yes' if job.stay_provided else 'No' }}</div>
+
+        {% if job.google_map_link %}
+        <div class="info-row">
+            <span class="label">Google Maps:</span>
+            <a href="{% if job.google_map_link.startswith('http') %}
+                        {{ job.google_map_link }}
+                     {% else %}
+                        https://www.google.com/maps/search/{{ job.google_map_link|replace(' ','+') }}
+                     {% endif %}"
+               target="_blank"
+               style="color:#2563eb;">
+                Open Location →
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+
+    <!-- ================= LARGE JOB COMPANY DETAILS ================= -->
+    {% if job.job_type == "large" %}
+    <div class="info-box">
+        <div class="info-title">🏢 Company Details</div>
+
+        <div class="info-row"><span class="label">Company:</span> {{ job.company_name }}</div>
+
+        {% if job.company_website %}
+        <div class="info-row">
+            <span class="label">Website:</span>
+            <a href="{{ job.company_website }}" target="_blank" style="color:#2563eb;">
+                {{ job.company_website }}
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="info-row"><span class="label">Address:</span> {{ job.company_address }}</div>
+    </div>
+    {% endif %}
+
+
+    <!-- ================= POSTER DETAILS (only admin sees) ================= -->
+    {% if is_admin %}
+    <div class="info-box">
+        <div class="info-title">👤 Posted By (Admin Only)</div>
+
+        <div class="info-row"><span class="label">Name:</span> {{ poster.name }}</div>
+        <div class="info-row"><span class="label">Email:</span> {{ poster.email }}</div>
+        <div class="info-row"><span class="label">Phone:</span> {{ poster.phone }}</div>
+    </div>
+    {% endif %}
+
+</div>
+
+
+<!-- ================= APPLY BUTTON ================= -->
+<div style="text-align:center; margin-top:25px;">
+
+    {% if is_admin %}
+        <!-- Admin cannot apply -->
+        <p style="color:#888;">Admins cannot apply for jobs.</p>
+
+    {% elif not current_user.is_authenticated %}
+        <a href="{{ url_for('login') }}" class="apply-btn">Login to Apply</a>
+
+    {% elif current_user.role == 'jobseeker' %}
+        <a href="{{ url_for('apply_job', job_id=job.id) }}" class="apply-btn">
+            Apply Now
+        </a>
+
+    {% endif %}
+</div>
+
+{% endblock %}

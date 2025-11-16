@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="text-align:center; margin:100px auto; max-width:600px;">
+    
+    <h1 style="font-size:80px; color:#ef4444; margin-bottom:10px; font-weight:900;">
+        404
+    </h1>
+
+    <h2 style="color:#1f2937; font-size:28px; margin-bottom:15px;">
+        Page Not Found
+    </h2>
+
+    <p style="color:#6b7280; font-size:16px; margin-bottom:25px;">
+        The page you are looking for might have been removed,<br>
+        had its name changed, or is temporarily unavailable.
+    </p>
+
+    <a href="{{ url_for('index') }}"
+       style="background:#3b82f6; color:white; padding:10px 20px; border-radius:8px;
+              text-decoration:none; font-weight:600; font-size:16px;">
+        ⬅ Go Back Home
+    </a>
+
+</div>
+{% endblock %}

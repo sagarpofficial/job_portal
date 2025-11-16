@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | OurJobs</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-card {
+      width: 360px;
+      background: #ffffff;
+      padding: 35px 40px;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+      animation: fadeIn 0.6s ease-in-out;
+      text-align: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      margin-bottom: 22px;
+      color: #1e3a8a;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .input-box {
+      width: 100%;
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .input-box label {
+      font-weight: 600;
+      color: #374151;
+      font-size: 14px;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: 0.25s;
+      outline: none;
+    }
+
+    .input-box input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 6px rgba(59,130,246,0.4);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #2563eb;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.25s ease;
+      letter-spacing: 0.3px;
+    }
+
+    button:hover {
+      background: #1e40af;
+      transform: translateY(-2px);
+    }
+
+    .footer {
+      margin-top: 18px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-card">
+    <h2>Admin Login</h2>
+
+    <form method="POST" action="{{ url_for('admin_login') }}">
+
+      <div class="input-box">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="Enter Admin Email" required>
+      </div>
+
+      <div class="input-box">
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter Admin Password" required>
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
+
+    <div class="footer">
+      © {{ current_year or 2025 }} OurJobs
+    </div>
+  </div>
+
+</body>
+</html>

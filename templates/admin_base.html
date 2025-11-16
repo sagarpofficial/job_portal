@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title if title else "Admin | OurJobs" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* HEADER */
+        .admin-header {
+            background: #1e40af;
+            color: white;
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .admin-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .admin-nav a {
+            color: white;
+            margin-left: 18px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.25s;
+        }
+
+        .admin-nav a:hover {
+            opacity: .85;
+            text-decoration: underline;
+        }
+
+        /* CONTENT WRAPPER */
+        main {
+            padding: 30px;
+            min-height: 80vh;
+        }
+
+        /* UNIVERSAL ADMIN CARD */
+        .admin-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+        }
+
+        @media (max-width: 600px) {
+            .admin-header {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+            }
+            .admin-nav {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="admin-header">
+    <h1>Admin Panel</h1>
+
+    <nav class="admin-nav">
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('admin_dashboard') }}#pending">Pending Jobs</a>
+        <a href="{{ url_for('admin_dashboard') }}#support">Support</a>
+        <a href="{{ url_for('admin_logout') }}">Logout</a>
+    </nav>
+</header>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+</body>
+</html>

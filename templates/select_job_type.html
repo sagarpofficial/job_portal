@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .job-type-container {
+    text-align: center;
+    margin-top: 80px;
+    font-family: "Poppins", sans-serif;
+  }
+
+  h2 {
+    color: #1e3a8a;
+    font-size: 28px;
+    margin-bottom: 25px;
+  }
+
+  .btn-job-type {
+    display: inline-block;
+    background-color: #2563eb;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    margin: 15px;
+    font-size: 18px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-job-type:hover {
+    background-color: #1d4ed8;
+    transform: scale(1.05);
+  }
+</style>
+
+<div class="job-type-container">
+  <h2>Select Job Type to Post</h2>
+
+  <a href="{{ url_for('post_job_small') }}" class="btn-job-type">🧱 Small-Scale Job</a>
+
+  <a href="{{ url_for('post_job_large') }}" class="btn-job-type">🏢 Large-Scale Job</a>
+</div>
+
+{% endblock %}

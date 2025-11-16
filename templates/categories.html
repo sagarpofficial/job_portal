@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="
+    max-width:460px;
+    margin:70px auto;
+    background:#ffffff;
+    padding:35px 40px;
+    border-radius:14px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.15);
+    text-align:center;
+">
+
+  <h2 style="color:#1e3a8a; font-size:24px; font-weight:700; margin-bottom:16px;">
+    Post a Job
+  </h2>
+
+  <p style="color:#374151; font-size:15px; margin-bottom:25px;">
+    Choose the job type you want to post.
+  </p>
+
+  <a href="{{ url_for('post_job_small') }}"
+     style="display:block; width:100%; background:#2563eb; color:white; 
+            padding:12px; border-radius:8px; margin-bottom:15px;
+            font-weight:600; text-decoration:none; transition:0.3s;">
+    Small Scale Job
+  </a>
+
+  <a href="{{ url_for('post_job_large') }}"
+     style="display:block; width:100%; background:#1e40af; color:white;
+            padding:12px; border-radius:8px; font-weight:600;
+            text-decoration:none; transition:0.3s;">
+    Large Scale Job
+  </a>
+
+</div>
+
+{% endblock %}

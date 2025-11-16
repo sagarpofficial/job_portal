@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+/* Full page center */
+.support-bg {
+    width: 100%;
+    min-height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(to bottom right, #eef2ff, #f8fafc);
+}
+
+/* Card */
+.support-card {
+    width: 600px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 35px;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+    animation: fadeIn 0.3s ease;
+}
+
+/* Heading */
+.support-title {
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    color: #1e40af;
+    margin-bottom: 5px;
+}
+
+.support-subtitle {
+    font-size: 15px;
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 25px;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(10px);}
+    to   {opacity: 1; transform: translateY(0);}
+}
+
+/* Input styles */
+.form-control {
+    height: 48px;
+    font-size: 15px;
+}
+
+textarea.form-control {
+    height: 120px;
+}
+</style>
+
+<div class="support-bg">
+    <div class="support-card">
+
+        <div class="support-title">📩 Customer Support</div>
+        <div class="support-subtitle">We are here to help you — please fill out the form below.</div>
+
+        <form method="POST">
+
+            <div class="mb-3">
+                <label class="form-label">Your Name</label>
+                <input type="text" name="name" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Subject</label>
+                <input type="text" name="subject" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Message</label>
+                <textarea name="message" class="form-control" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100"
+                    style="height: 50px; font-size: 17px; font-weight: 600;">
+                Submit Message
+            </button>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

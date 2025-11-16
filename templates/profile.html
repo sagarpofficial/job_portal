@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .profile-container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    padding: 30px;
+    animation: fadeIn 0.6s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .profile-header {
+    text-align: center;
+    border-bottom: 2px solid #3b82f6;
+    padding-bottom: 10px;
+  }
+
+  .profile-header img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 2px solid #3b82f6;
+    margin-bottom: 10px;
+  }
+
+  .profile-header h2 {
+    color: #1976d2;
+    margin: 0;
+  }
+
+  .section {
+    margin-top: 30px;
+  }
+
+  .section h3 {
+    color: #111827;
+    border-bottom: 2px solid #3b82f6;
+    display: inline-block;
+    padding-bottom: 4px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+  }
+
+  th, td {
+    border: 1px solid #e5e7eb;
+    padding: 10px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f3f4f6;
+  }
+
+  .no-data {
+    text-align: center;
+    padding: 20px;
+    color: #6b7280;
+  }
+
+  .download-btn {
+    background-color: #3b82f6;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+
+  .download-btn:hover {
+    background-color: #2563eb;
+  }
+</style>
+
+<div class="profile-container">
+  
+  <!-- HEADER -->
+  <div class="profile-header">
+    <img src="{{ url_for('static', filename='profile_icon.png') }}" alt="Profile Picture">
+    <h2>{{ user.name }}</h2>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+  </div>
+
+  <!-- ================= EMPLOYER VIEW ================= -->
+  {% if is_employer %}
+
+  <!-- Jobs posted -->
+  <div class="section">
+    <h3>🏢 Jobs You Posted</h3>
+
+    {% if posted_jobs %}
+      <table>
+        <tr>
+          <th>Job Title</th>
+          <th>Category</th>
+          <th>Posted On</th>
+          <th>Status</th>
+        </tr>
+
+        {% for job in posted_jobs %}
+        <tr>
+          <td>{{ job.title }}</td>
+          <td>{{ job.category or 'N/A' }}</td>
+          <td>{{ job.created_at.strftime('%Y-%m-%d') }}</td>
+          <td>
+            {% if job.status == 'Approved' %}
+              <strong style="color:green;">✔ Approved</strong>
+            {% elif job.status == 'Pending' %}
+              <strong style="color:orange;">⏳ Pending</strong>
+            {% elif job.status == 'Rejected' %}
+              <strong style="color:red;">✖ Rejected</strong>
+            {% else %}
+              N/A
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <div class="no-data">You haven't posted any jobs yet.</div>
+    {% endif %}
+  </div>
+
+
+  <!-- Applications received -->
+  <div class="section">
+    <h3>📩 Applicants for Your Jobs</h3>
+
+    {% if applications %}
+      <table>
+        <tr>
+          <th>Applicant</th>
+          <th>Job Title</th>
+          <th>Email</th>
+          <th>Resume</th>
+          <th>Applied On</th>
+        </tr>
+
+        {% for app in applications %}
+        <tr>
+          <td>{{ app.full_name }}</td>
+          <td>{{ app.job.title }}</td>
+          <td>{{ app.email }}</td>
+
+          <td>
+            {% if app.resume_file %}
+              <a href="{{ url_for('download_resume', filename=app.resume_file) }}" class="download-btn">Download</a>
+            {% else %}
+              No Resume
+            {% endif %}
+          </td>
+
+          <td>{{ app.applied_at.strftime('%Y-%m-%d %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <div class="no-data">No applications received yet.</div>
+    {% endif %}
+  </div>
+
+
+  <!-- ================= JOBSEEKER VIEW ================= -->
+  {% else %}
+
+  <div class="section">
+    <h3>📄 Your Job Applications</h3>
+
+    {% if applications %}
+      <table>
+        <tr>
+          <th>Job Title</th>
+          <th>Status</th>
+          <th>Applied On</th>
+        </tr>
+
+        {% for app in applications %}
+        <tr>
+          <td>{{ app.job.title }}</td>
+          <td>{{ app.status or 'Pending' }}</td>
+          <td>{{ app.applied_at.strftime('%Y-%m-%d') }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <div class="no-data">You have not applied to any jobs yet.</div>
+    {% endif %}
+  </div>
+
+  {% endif %}
+
+</div>
+
+{% endblock %}

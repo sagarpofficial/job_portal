@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="form-container"
+     style="max-width:450px; margin:50px auto; background:#ffffff; padding:30px;
+            border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.12);">
+
+  <h2 style="text-align:center; margin-bottom:20px; color:#1f2937;">Register</h2>
+
+  <form method="POST" action="{{ url_for('register') }}" enctype="multipart/form-data">
+
+    <label style="font-weight:600;">Full Name</label>
+    <input type="text" name="name" required style="margin-bottom:12px;" class="form-control">
+
+    <label style="font-weight:600;">Email</label>
+    <input type="email" name="email" required style="margin-bottom:12px;" class="form-control">
+
+    <label style="font-weight:600;">Password</label>
+    <input type="password" name="password" required style="margin-bottom:12px;" class="form-control">
+
+    <label style="font-weight:600;">Phone Number</label>
+    <input type="text" name="phone" required style="margin-bottom:12px;" class="form-control">
+
+    <label style="font-weight:600;">Date of Birth</label>
+    <input type="date" name="dob" required style="margin-bottom:12px;" class="form-control">
+
+    <label style="font-weight:600;">Gender</label>
+    <select name="gender" class="form-control" required style="margin-bottom:12px;">
+      <option value="">Select</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+      <option value="other">Other</option>
+    </select>
+
+    <label style="font-weight:600;">Address</label>
+    <textarea name="address" class="form-control" required style="margin-bottom:12px;"></textarea>
+
+    <hr style="margin:18px 0;">
+
+    <label style="font-weight:600;">Government ID Type</label>
+    <select name="gov_id_type" class="form-control" required style="margin-bottom:12px;">
+      <option value="">Select</option>
+      <option value="aadhaar">Aadhaar</option>
+      <option value="pan">PAN</option>
+      <option value="voter">Voter ID</option>
+    </select>
+
+    <label style="font-weight:600;">Government ID Number</label>
+    <input type="text" name="gov_id_number" required style="margin-bottom:12px;" class="form-control">
+
+    <label style="font-weight:600;">Upload ID Proof</label>
+    <input type="file" name="gov_id_file" required class="form-control"
+           accept=".jpg,.jpeg,.png,.pdf" style="margin-bottom:12px;">
+
+    <hr style="margin:18px 0;">
+
+    <label style="font-weight:600;">Register As</label>
+    <select name="role" class="form-control" required style="margin-bottom:12px;">
+      <option value="jobseeker">Job Seeker</option>
+      <option value="employer">Employer</option>
+    </select>
+
+    <button type="submit"
+            style="background:#2563eb; color:white; padding:12px; border:none;
+                   border-radius:8px; width:100%; font-weight:600; font-size:16px;
+                   cursor:pointer; margin-top:10px;">
+      Register & Send OTP
+    </button>
+  </form>
+
+  <p style="text-align:center; margin-top:15px; font-size:14px; color:#4b5563;">
+    Already have an account?
+    <a href="{{ url_for('login') }}" style="color:#3b82f6;">Login</a>
+  </p>
+
+</div>
+
+{% endblock %}

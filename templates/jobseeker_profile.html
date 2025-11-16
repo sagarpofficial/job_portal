@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .profile-box {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 750px;
+    margin: 60px auto;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    font-family: "Poppins", sans-serif;
+  }
+
+  label {
+    font-weight: 600;
+    margin-top: 12px;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+
+  textarea {
+    resize: none;
+  }
+
+  .btn-primary {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    background: #2563eb;
+    border: none;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background: #1e3a8a;
+  }
+</style>
+
+<div class="profile-box">
+  <h2 style="color:#2563eb; text-align:center; margin-bottom:20px;">
+    Create / Edit Jobseeker Profile
+  </h2>
+
+  <form method="POST" enctype="multipart/form-data">
+
+    <!-- PHONE -->
+    <label>Phone</label>
+    <input class="form-control" type="text" name="phone"
+           value="{{ profile.phone if profile else '' }}">
+
+    <!-- DOB -->
+    <label>Date of Birth</label>
+    <input class="form-control" type="date" name="dob"
+           value="{{ profile.dob.strftime('%Y-%m-%d') if profile and profile.dob else '' }}">
+
+    <!-- GENDER -->
+    <label>Gender</label>
+    <select class="form-control" name="gender">
+      <option value="">Select</option>
+      <option value="male"   {% if profile and profile.gender=='male' %}selected{% endif %}>Male</option>
+      <option value="female" {% if profile and profile.gender=='female' %}selected{% endif %}>Female</option>
+      <option value="other"  {% if profile and profile.gender=='other' %}selected{% endif %}>Other</option>
+    </select>
+
+    <!-- ADDRESS -->
+    <label>Address</label>
+    <textarea class="form-control" name="address">{{ profile.address if profile else '' }}</textarea>
+
+    <hr>
+
+    <!-- QUALIFICATION -->
+    <label>Highest Qualification</label>
+    <input class="form-control" type="text" name="highest_qualification"
+           value="{{ profile.highest_qualification if profile else '' }}">
+
+    <!-- SKILLS -->
+    <label>Skills (comma separated)</label>
+    <input class="form-control" type="text" name="skills"
+           value="{{ profile.skills if profile else '' }}">
+
+    <!-- EXPERIENCE -->
+    <label>Experience (years)</label>
+    <input class="form-control" type="number" step="0.1" name="experience_years"
+           value="{{ profile.experience_years if profile else '' }}">
+
+    <hr>
+
+    <!-- GOVERNMENT ID -->
+    <h4 style="margin-bottom:10px;">Identity Verification</h4>
+
+    <label>Government ID Type</label>
+    <select class="form-control" name="gov_id_type">
+      <option value="">Select</option>
+      <option value="aadhaar" {% if profile and profile.gov_id_type=='aadhaar' %}selected{% endif %}>Aadhaar</option>
+      <option value="pan"     {% if profile and profile.gov_id_type=='pan' %}selected{% endif %}>PAN</option>
+      <option value="gst"     {% if profile and profile.gov_id_type=='gst' %}selected{% endif %}>GST</option>
+    </select>
+
+    <label>Government ID Number</label>
+    <input class="form-control" type="text" name="gov_id_number"
+           value="{{ profile.gov_id_number if profile else '' }}">
+
+    <!-- ID PROOF UPLOAD -->
+    <label>Upload ID Proof (jpg/png/pdf)</label>
+    <input class="form-control" type="file" name="gov_id_file" accept=".jpg,.jpeg,.png,.pdf">
+
+    {% if profile and profile.gov_id_file %}
+      <p>
+        Existing ID Proof:
+        <a href="{{ url_for('download_id_proof', filename=profile.gov_id_file) }}" target="_blank">
+          {{ profile.gov_id_file }}
+        </a>
+      </p>
+    {% endif %}
+
+    <!-- RESUME UPLOAD -->
+    <label>Resume (PDF)</label>
+    <input class="form-control" type="file" name="resume_file" accept=".pdf">
+
+    {% if profile and profile.resume_file %}
+      <p>
+        Existing Resume:
+        <a href="{{ url_for('download_resume', filename=profile.resume_file) }}" target="_blank">
+          {{ profile.resume_file }}
+        </a>
+      </p>
+    {% endif %}
+
+    <!-- PROFILE PHOTO -->
+    <label>Profile Photo</label>
+    <input class="form-control" type="file" name="profile_photo" accept=".jpg,.jpeg,.png">
+
+    {% if profile and profile.profile_photo %}
+      <p>Existing Photo:</p>
+      <img src="{{ url_for('profile_photo', filename=profile.profile_photo) }}"
+           style="height:80px; border-radius:6px;">
+    {% endif %}
+
+    <button class="btn-primary" type="submit">Save Profile</button>
+  </form>
+</div>
+
+{% endblock %}

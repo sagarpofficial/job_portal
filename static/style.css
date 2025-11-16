@@ -1,0 +1,127 @@
+/* Basic reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, Helvetica, sans-serif; background: #f6f8fb; color: #111827; line-height: 1.4; }
+.container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+/* Navbar */
+.navbar { background: #2563eb; color: #fff; padding: 12px 0; }
+.navbar .container { display: flex; align-items: center; justify-content: space-between; }
+.logo { color: #fff; font-weight: 700; text-decoration: none; font-size: 20px; }
+.nav-links { list-style: none; display: flex; gap: 12px; align-items:center; }
+.nav-links a { color: #fff; text-decoration: none; padding: 8px 12px; border-radius:6px; }
+.nav-links a.btn { background: #fff; color: #2563eb; font-weight:700; }
+
+/* Flash */
+.flash-container { margin: 12px 0; }
+.flash { padding: 10px; border-radius: 6px; margin-bottom: 8px; }
+.flash.success { background: #d1fae5; color: #065f46; }
+.flash.info { background: #dbeafe; color: #1e3a8a; }
+.flash.warning { background: #fff7ed; color: #92400e; }
+.flash.danger { background: #fee2e2; color: #7f1d1d; }
+
+/* Job list */
+.page-title { margin: 18px 0; font-size: 22px; color: #0f172a; }
+.job-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 14px; }
+.job-card { background: #fff; border-radius: 8px; padding: 14px; box-shadow: 0 4px 12px rgba(2,6,23,0.06); }
+.job-card h3 { margin-bottom: 6px; font-size: 18px; color: #0b1220; }
+.job-card p { color: #475569; margin: 6px 0; font-size: 13px; }
+.job-card .desc { margin-top: 8px; color: #374151; }
+.job-card .actions { margin-top: 10px; display:flex; gap:8px; }
+
+/* Buttons */
+.btn { display:inline-block; padding:8px 12px; background:#2563eb; color:#fff; text-decoration:none; border-radius:6px; font-weight:600; }
+.btn:active, .btn:focus { transform: translateY(1px); }
+
+/* Forms */
+.form-container, .apply-form, .profile-container { background: #fff; padding: 18px; border-radius:8px; box-shadow: 0 4px 12px rgba(2,6,23,0.04); margin-top: 16px; }
+.form-container form label { display:block; margin:10px 0 6px; font-weight:600; color:#0f172a; }
+.form-container input[type="text"], .form-container input[type="email"], .form-container input[type="password"], .form-container select, .form-container textarea { width:100%; padding:10px; border-radius:6px; border:1px solid #e6eef8; background:#fff; }
+textarea { min-height:120px; }
+
+/* Tables */
+.table { width:100%; border-collapse: collapse; margin-top:12px; }
+.table th, .table td { text-align:left; padding:8px; border-bottom:1px solid #eef2ff; }
+
+/* Responsive */
+@media (max-width:720px) {
+  .nav-links { display:none; }
+  .container { padding:12px; }
+  .job-list { grid-template-columns: 1fr; }
+}
+
+/* Strong override for support page background and centering */
+body {
+  /* full page faint pattern + gradient, change colors as needed */
+  background: linear-gradient(135deg, #f3f4f6 0%, #ffffff 60%) !important;
+  background-attachment: fixed !important;
+}
+
+/* make sure main.container does not limit width on this page */
+main.container {
+  max-width: 100% !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+/* centre the support card vertically and horizontally */
+.support-wrapper {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  min-height: calc(100vh - 120px) !important; /* subtract header/footer height */
+  background: transparent !important;
+}
+
+/* final card styling */
+.support-card {
+  width: 100% !important;
+  max-width: 520px !important;
+  margin: 0 16px !important;
+  background: rgba(255,255,255,0.95) !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+  border-radius: 12px !important;
+  padding: 36px 28px !important;
+}
+/* ===== Flash Messages (Top Center) ===== */
+.flash-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flash {
+  min-width: 300px;
+  max-width: 500px;
+  text-align: center;
+  padding: 12px 18px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  animation: fadeInDown 0.5s ease;
+}
+
+.flash.success {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.flash.error, .flash.danger {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.flash.warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translate(-50%, -20px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .login-container {
+    max-width: 400px;
+    margin: 60px auto;
+    background-color: #fff;
+    padding: 35px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+    font-family: "Poppins", sans-serif;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .login-container h2 {
+    color: #2563eb;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+
+  label {
+    text-align: left;
+    display: block;
+    font-weight: 600;
+    margin: 10px 0 5px;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    outline: none;
+    transition: .2s;
+  }
+
+  input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 5px rgba(37,99,235,0.25);
+  }
+
+  .btn-login {
+    width: 100%;
+    padding: 12px;
+    margin-top: 18px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+  }
+
+  .btn-login:hover {
+    background: #1e3a8a;
+  }
+
+  .otp-link {
+    margin-top: 15px;
+    font-size: 14px;
+  }
+
+  .otp-link a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .otp-link a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="login-container">
+  <h2>Login</h2>
+
+  <!-- Flash error/success messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, msg in messages %}
+        <p style="color: {% if category=='error' %}red{% else %}green{% endif %}; font-weight:600;">
+          {{ msg }}
+        </p>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="{{ url_for('login') }}">
+    <label>Email</label>
+    <input type="email" name="email" placeholder="Enter your email" required>
+
+    <label>Password</label>
+    <input type="password" name="password" placeholder="Enter your password" required>
+
+    <button class="btn-login" type="submit">Login</button>
+  </form>
+
+  <p class="otp-link">Or <a href="{{ url_for('send_otp') }}">Login with OTP</a></p>
+</div>
+
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .form-container {
+    max-width: 400px;
+    margin: 60px auto;
+    background: #fff;
+    padding: 30px 35px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    font-family: "Poppins", sans-serif;
+    animation: fadeIn 0.4s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity:0; transform:translateY(-10px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 18px;
+    color: #1e40af;
+  }
+
+  label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+    color: #374151;
+  }
+
+  input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    outline: none;
+    transition: .3s;
+  }
+
+  input[type="email"]:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 5px rgba(37,99,235,0.3);
+  }
+
+  .btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+  }
+
+  .btn:hover {
+    background-color: #1e3a8a;
+  }
+</style>
+
+<div class="form-container">
+  <h2>Login with OTP</h2>
+
+  <form method="POST" action="{{ url_for('send_otp') }}">
+    <label>Email</label>
+    <input type="email" name="email" required placeholder="Enter your registered email">
+
+    <button class="btn" type="submit">Send OTP</button>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="apply-container"
+     style="background:#ffffff; padding:32px 40px; border-radius:14px;
+            max-width:520px; margin:55px auto; box-shadow:0 6px 20px rgba(0,0,0,0.15);">
+
+  <h2 style="text-align:center; color:#1e3a8a; margin-bottom:25px; font-size:26px; font-weight:700;">
+    Apply for {{ job.title }}
+  </h2>
+
+  <form method="POST" enctype="multipart/form-data">
+
+    <!-- FULL NAME -->
+    <label style="font-weight:600;">Full Name</label>
+    <input type="text" name="full_name" required
+           value="{{ current_user.name if current_user.is_authenticated else '' }}"
+           style="width:100%; padding:12px; margin:6px 0 16px; border:1px solid #d1d5db; border-radius:8px;">
+
+    <!-- EMAIL -->
+    <label style="font-weight:600;">Email</label>
+    <input type="email" name="email" required
+           value="{{ current_user.email if current_user.is_authenticated else '' }}"
+           style="width:100%; padding:12px; margin:6px 0 16px; border:1px solid #d1d5db; border-radius:8px;">
+
+    <!-- PHONE -->
+    <label style="font-weight:600;">Phone Number</label>
+    <input type="text" name="phone"
+           value="{{ current_user.phone if current_user.is_authenticated else '' }}"
+           style="width:100%; padding:12px; margin:6px 0 16px; border:1px solid #d1d5db; border-radius:8px;">
+
+    <!-- AGE -->
+    <label style="font-weight:600;">Age</label>
+    <input type="number" name="age"
+           style="width:100%; padding:12px; margin:6px 0 16px; border:1px solid #d1d5db; border-radius:8px;">
+
+    <!-- EXPERIENCE -->
+    <label style="font-weight:600;">Experience (Years)</label>
+    <input type="number" name="experience"
+           style="width:100%; padding:12px; margin:6px 0 16px; border:1px solid #d1d5db; border-radius:8px;">
+
+    <!-- OPTIONAL RESUME -->
+    <label style="font-weight:600;">Upload Resume (PDF – Optional)</label>
+    <input type="file" name="resume" accept=".pdf"
+           style="width:100%; padding:8px; margin-bottom:6px;">
+    <small style="color:#6b7280; display:block; margin-bottom:18px;">
+      You may skip this if resume is not required.
+    </small>
+
+    <!-- COVER LETTER -->
+    <label style="font-weight:600;">Cover Letter</label>
+    <textarea name="cover_letter"
+              style="width:100%; padding:12px; height:110px; resize:none; margin-top:6px;
+                     border:1px solid #d1d5db; border-radius:8px;"></textarea>
+
+    <!-- SUBMIT -->
+    <button type="submit"
+            style="margin-top:18px; width:100%; background:#2563eb; padding:12px;
+                   border:none; border-radius:8px; color:white; font-size:16px;
+                   font-weight:600; cursor:pointer; transition:0.3s;">
+      Submit Application
+    </button>
+  </form>
+
+  <a href="{{ url_for('index') }}"
+     style="display:block; margin-top:18px; text-align:center; text-decoration:none;
+            color:#2563eb; font-weight:600;">
+    ← Back to Job Listings
+  </a>
+
+</div>
+
+{% endblock %}
