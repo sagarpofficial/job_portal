@@ -61,16 +61,14 @@ admin_role_permissions = db.Table(
 
 # -------------------- MAIL --------------------
 
-
-
-app.config['MAIL_SERVER'] = os.getenv("MAIL_SERVER", "smtp.gmail.com")
-app.config['MAIL_PORT'] = int(os.getenv("MAIL_PORT", 587))
-app.config['MAIL_USE_TLS'] = os.getenv("MAIL_USE_TLS", "true").lower() == "true"
+app.config['MAIL_SERVER'] = os.environ.get("MAIL_SERVER", "smtp.gmail.com")
+app.config['MAIL_PORT'] = int(os.environ.get("MAIL_PORT", 587))
+app.config['MAIL_USE_TLS'] = os.environ.get("MAIL_USE_TLS", "true").lower() == "true"
 app.config['MAIL_USE_SSL'] = False
 
-app.config['MAIL_USERNAME'] = os.getenv("jobsour997@gmail.com")
-app.config['MAIL_PASSWORD'] = os.getenv("iiprvglsjgieiiny")
-app.config['MAIL_DEFAULT_SENDER'] = app.config['MAIL_USERNAME']
+app.config['MAIL_USERNAME'] = os.environ.get("jobsour997@gmail.com")
+app.config['MAIL_PASSWORD'] = os.environ.get("iiprvglsjgieiiny")
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get("MAIL_USERNAME")
 
 mail = Mail(app)
 # -------------------- UPLOADS --------------------
