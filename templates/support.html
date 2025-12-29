@@ -2,95 +2,145 @@
 {% block content %}
 
 <style>
-/* Full page center */
-.support-bg {
-    width: 100%;
-    min-height: 85vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background: linear-gradient(to bottom right, #eef2ff, #f8fafc);
+.support-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #dbeafe, #f8fafc);
 }
 
-/* Card */
 .support-card {
-    width: 600px;
-    background: #ffffff;
-    border-radius: 14px;
-    padding: 35px;
-    box-shadow: 0 6px 25px rgba(0,0,0,0.12);
-    animation: fadeIn 0.3s ease;
+  background: white;
+  width: 480px;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
 }
 
-/* Heading */
 .support-title {
-    font-size: 28px;
-    font-weight: 700;
-    text-align: center;
-    color: #1e40af;
-    margin-bottom: 5px;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e40af;
+  margin-bottom: 6px;
 }
 
 .support-subtitle {
-    font-size: 15px;
-    text-align: center;
-    color: #6b7280;
-    margin-bottom: 25px;
+  text-align: center;
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 24px;
 }
 
-/* Fade-in animation */
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(10px);}
-    to   {opacity: 1; transform: translateY(0);}
+.form-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
 }
 
-/* Input styles */
 .form-control {
-    height: 48px;
-    font-size: 15px;
+  width: 100%;
+  height: 46px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  padding: 10px 14px;
+  margin-bottom: 14px;
 }
 
 textarea.form-control {
-    height: 120px;
+  height: 110px;
+}
+
+.form-control:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.25);
+}
+
+.support-btn {
+  width: 100%;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  border: none;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* ================= MOBILE OPTIMIZATION ================= */
+@media (max-width: 768px) {
+
+  .support-page {
+    padding: 20px;
+    align-items: flex-start;
+  }
+
+  .support-card {
+    width: 100%;
+    padding: 24px 20px;
+    border-radius: 14px;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+  }
+
+  .support-title {
+    font-size: 22px;
+  }
+
+  .support-subtitle {
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+
+  .form-label {
+    font-size: 14px;
+  }
+
+  .form-control {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  textarea.form-control {
+    height: 100px;
+  }
+
+  .support-btn {
+    height: 46px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
 }
 </style>
 
-<div class="support-bg">
-    <div class="support-card">
+<div class="support-page">
+  <div class="support-card">
 
-        <div class="support-title">📩 Customer Support</div>
-        <div class="support-subtitle">We are here to help you — please fill out the form below.</div>
-
-        <form method="POST">
-
-            <div class="mb-3">
-                <label class="form-label">Your Name</label>
-                <input type="text" name="name" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Email Address</label>
-                <input type="email" name="email" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Subject</label>
-                <input type="text" name="subject" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Message</label>
-                <textarea name="message" class="form-control" required></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100"
-                    style="height: 50px; font-size: 17px; font-weight: 600;">
-                Submit Message
-            </button>
-        </form>
-
+    <div class="support-title">📩 Customer Support</div>
+    <div class="support-subtitle">
+      We are here to help you — please fill out the form below.
     </div>
+
+    <form method="POST">
+      <label class="form-label">Your Name</label>
+      <input type="text" name="name" class="form-control" required>
+
+      <label class="form-label">Email Address</label>
+      <input type="email" name="email" class="form-control" required>
+
+      <label class="form-label">Subject</label>
+      <input type="text" name="subject" class="form-control" required>
+
+      <label class="form-label">Message</label>
+      <textarea name="message" class="form-control" required></textarea>
+
+      <button class="support-btn" type="submit">
+        Submit Message
+      </button>
+    </form>
+
+  </div>
 </div>
 
 {% endblock %}

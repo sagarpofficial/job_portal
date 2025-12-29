@@ -147,9 +147,24 @@
 
 <!-- ===================== ACTION BUTTONS ===================== -->
 <div class="action-bar">
-  <a href="{{ url_for('approve_job', job_id=job.id) }}" class="btn-action btn-approve">✔ Approve</a>
-  <a href="{{ url_for('reject_job', job_id=job.id) }}" class="btn-action btn-reject">✖ Reject</a>
-  <a href="{{ url_for('admin_dashboard') }}" class="btn-action btn-back">← Back</a>
+
+  {% if job.status == 'Pending' %}
+    <a href="{{ url_for('approve_job', job_id=job.id) }}"
+       class="btn-action btn-approve">
+       ✔ Approve
+    </a>
+
+    <a href="{{ url_for('reject_job', job_id=job.id) }}"
+       class="btn-action btn-reject">
+       ✖ Reject
+    </a>
+  {% endif %}
+
+  <a href="{{ url_for('admin_dashboard') }}"
+     class="btn-action btn-back">
+     ← Back
+  </a>
+
 </div>
 
 {% endblock %}

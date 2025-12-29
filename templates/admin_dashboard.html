@@ -2,240 +2,263 @@
 {% block content %}
 
 <style>
-  .dashboard-container {
-    width: 96%;
-    margin: 30px auto;
-  }
-
-  .section {
-    margin-top: 30px;
-  }
-
-  h2, h3 {
-    color: #1e3a8a;
-    text-align: center;
-  }
+  .dashboard-container { width:96%; margin:30px auto; }
+  h2, h3 { color:#1e3a8a; text-align:center; }
 
   table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 12px;
-    font-size: 15px;
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+    font-size:15px;
   }
-
   th, td {
-    padding: 10px;
-    border: 1px solid #e5e7eb;
+    padding:10px;
+    border:1px solid #e5e7eb;
+    text-align:center;
   }
+  th { background:#2563eb; color:white; }
+  tr:nth-child(even){ background:#f9fafb; }
 
-  th {
-    background: #2563eb;
-    color: white;
-  }
-
-  tr:nth-child(even) {
-    background: #f9fafb;
-  }
-
-  .hidden {
-    display: none;
-  }
+  .section { margin-top:30px; display:none; }
 
   .action-btn {
-    padding: 6px 10px;
-    border-radius: 6px;
-    text-decoration: none;
-    color: white;
-    font-weight: 600;
-    margin-right: 6px;
+    padding:8px 14px;
+    border-radius:6px;
+    color:white;
+    font-weight:600;
+    text-decoration:none;
+    display:inline-block;
   }
 
-  .approve {
-    background: #16a34a;
-  }
+  .approve { background:#16a34a; }
+  .reject { background:#dc2626; }
+  .view { background:#0ea5e9; }
 
-  .reject {
-    background: #dc2626;
+  /* Role badges */
+  .badge {
+    padding:4px 10px;
+    border-radius:12px;
+    font-size:13px;
+    font-weight:600;
+    color:white;
   }
-
-  .view {
-    background: #0ea5e9;
-  }
+  .badge-job { background:#2563eb; }
+  .badge-user { background:#16a34a; }
+  .badge-support { background:#7c3aed; }
+  .badge-super { background:#dc2626; }
 </style>
 
 <div class="dashboard-container">
 
-  <h2>🛠 Admin Dashboard</h2>
+<h2>🛠 Admin Dashboard</h2>
 
-  <!-- 🔥 ADMIN FLASH MESSAGE (Only for admin) -->
-  {% if session.get('admin_flash') %}
-      <div class="flash success" style="margin-top: 10px; text-align:center;">
-          {{ session.pop('admin_flash') }}
-      </div>
-  {% endif %}
+<!-- ================= SUMMARY (SUPER ADMIN ONLY) ================= -->
+{% if current_admin.is_super_admin %}
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:15px; margin-top:20px;">
+  <div class="action-btn approve">👤 Users<br><strong>{{ total_users }}</strong></div>
+  <div class="action-btn view">🧑‍💼 Employers<br><strong>{{ total_employers }}</strong></div>
+  <div class="action-btn view">🧑‍🎓 Job Seekers<br><strong>{{ total_jobseekers }}</strong></div>
+  <div class="action-btn approve">📄 Jobs<br><strong>{{ total_jobs }}</strong></div>
+  <div class="action-btn reject">🕒 Pending<br><strong>{{ pending_count }}</strong></div>
+  <div class="action-btn approve">📩 Support<br><strong>{{ support_pending }}</strong></div>
+</div>
+{% endif %}
 
-  <!-- Dropdown Section Selector -->
-  <div style="text-align:center; margin-top: 20px;">
-    <select id="sectionSelect" onchange="switchSection()"
-            style="padding:10px; border-radius:6px;">
+<!-- ================= SECTION SELECT ================= -->
+<div style="text-align:center; margin-top:30px;">
+  <select id="sectionSelect" onchange="switchSection()" style="padding:10px;">
+
+    {% if current_admin.has_permission('manage_users') or current_admin.is_super_admin %}
       <option value="users">👤 Users</option>
+    {% endif %}
+
+    {% if current_admin.is_super_admin %}
+      <option value="subadmins">🛡 Sub Admins</option>
+    {% endif %}
+
+    {% if current_admin.has_permission('manage_jobs') or current_admin.is_super_admin %}
       <option value="pending">🕒 Pending Jobs</option>
       <option value="approved">✅ Approved Jobs</option>
       <option value="rejected">❌ Rejected Jobs</option>
-      <option value="support">📩 Support Messages</option>
-    </select>
-  </div>
+    {% endif %}
 
-  <!-- USERS -->
-  <div id="users" class="section">
-    <h3>👤 Registered Users</h3>
+    {% if current_admin.has_permission('manage_support') or current_admin.is_super_admin %}
+      <option value="support">📩 Support</option>
+    {% endif %}
 
-    <table>
-      <tr>
-        <th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Joined</th>
-      </tr>
+  </select>
+</div>
 
-      {% for u in users %}
-      <tr>
-        <td>{{ u.id }}</td>
-        <td>{{ u.name }}</td>
-        <td>{{ u.email }}</td>
-        <td>
-          {% if u.is_admin %} Admin
-          {% elif u.role == 'employer' %} Employer
-          {% else %} Job Seeker {% endif %}
-        </td>
-        <td>{{ u.created_at.strftime('%Y-%m-%d') }}</td>
+<!-- ================= ACTIVITY LOG LINK ================= -->
+{% if current_admin.is_super_admin or current_admin.has_permission('view_logs') %}
+<div style="text-align:center; margin-top:15px;">
+  <a href="{{ url_for('admin_activity') }}" class="action-btn view">
+    📜 View Admin Activity
+  </a>
+</div>
+{% endif %}
 
-        <td>
-          {% if not u.is_admin %}
-            <a href="{{ url_for('admin_delete_user', user_id=u.id) }}"
-              class="action-btn reject"
-              onclick="return confirm('Delete this user and all data?')">
-              Delete
-            </a>
-          {% else %}
-            —
-        {% endif %}
-      </td>
-    </tr>
-  {% endfor %}
-    </table>
-  </div>
+<!-- ================= USERS ================= -->
+{% if current_admin.has_permission('manage_users') or current_admin.is_super_admin %}
+<div id="users" class="section">
+<h3>👤 Registered Users</h3>
+<table>
+<tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr>
+{% for u in users %}
+<tr>
+  <td>{{ u.id }}</td>
+  <td>{{ u.name }}</td>
+  <td>{{ u.email }}</td>
+  <td>{{ u.role|title }}</td>
+  <td>{{ u.created_at.strftime('%Y-%m-%d') }}</td>
+</tr>
+{% else %}
+<tr><td colspan="5">No users found</td></tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
 
-  <!-- PENDING JOBS -->
-  <div id="pending" class="section hidden">
-    <h3>🕒 Pending Jobs</h3>
+<!-- ================= SUB ADMINS ================= -->
+{% if current_admin.is_super_admin %}
+<div id="subadmins" class="section">
+<h3>🛡 Sub Admins</h3>
 
-    <table>
-      <tr>
-        <th>ID</th><th>Title</th><th>Poster</th><th>Status</th><th>Actions</th>
-      </tr>
+<div style="text-align:right; margin-bottom:10px;">
+  <a href="{{ url_for('admin_create_subadmin') }}" class="action-btn view">
+    ➕ Create Sub-Admin
+  </a>
+</div>
 
-      {% for job in pending_jobs %}
-      <tr>
-        <td>{{ job.id }}</td>
-        <td>{{ job.title }}</td>
-        <td>{{ job.poster.email if job.poster else 'Unknown' }}</td>
-        <td>{{ job.status }}</td>
+<table>
+<tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Action</th></tr>
 
-        <td>
-          <a href="{{ url_for('admin_view_job', job_id=job.id) }}" class="action-btn view">View</a>
-          <a href="{{ url_for('approve_job', job_id=job.id) }}" class="action-btn approve">Approve</a>
-          <a href="{{ url_for('reject_job', job_id=job.id) }}" class="action-btn reject">Reject</a>
-        </td>
-      </tr>
-      {% else %}
-      <tr><td colspan="5" style="text-align:center;">No pending jobs.</td></tr>
-      {% endfor %}
-    </table>
-  </div>
+{% for a in subadmins %}
+<tr>
+  <td>{{ a.id }}</td>
+  <td>{{ a.name }}</td>
+  <td>{{ a.email }}</td>
+  <td>
+    {% if a.is_super_admin %}
+      <span class="badge badge-super">Super Admin</span>
+    {% elif a.admin_role.name == "Job Admin" %}
+      <span class="badge badge-job">Job Admin</span>
+    {% elif a.admin_role.name == "User Admin" %}
+      <span class="badge badge-user">User Admin</span>
+    {% elif a.admin_role.name == "Support Admin" %}
+      <span class="badge badge-support">Support Admin</span>
+    {% endif %}
+  </td>
+  <td>{{ a.created_at.strftime('%Y-%m-%d') }}</td>
+  <td>
+    <a href="{{ url_for('admin_delete_subadmin', user_id=a.id) }}"
+       class="action-btn reject"
+       onclick="return confirm('Delete this sub-admin?')">
+       🗑 Delete
+    </a>
+  </td>
+</tr>
+{% else %}
+<tr><td colspan="6">No sub-admins found</td></tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
 
-  <!-- APPROVED JOBS -->
-  <div id="approved" class="section hidden">
-    <h3>✅ Approved Jobs</h3>
+<!-- ================= JOBS ================= -->
+{% if current_admin.has_permission('manage_jobs') or current_admin.is_super_admin %}
 
-    <table>
-      <tr>
-        <th>ID</th><th>Title</th><th>Posted By</th><th>Date</th>
-      </tr>
+<div id="pending" class="section">
+<h3>🕒 Pending Jobs</h3>
+<table>
+<tr><th>ID</th><th>Title</th><th>Posted By</th><th>Action</th></tr>
+{% for job in pending_jobs %}
+<tr>
+<td>{{ job.id }}</td>
+<td>{{ job.title }}</td>
+<td>{{ job.poster.email }}</td>
+<td>
+<a href="{{ url_for('admin_view_job', job_id=job.id) }}" class="action-btn view">View</a>
+<a href="{{ url_for('approve_job', job_id=job.id) }}" class="action-btn approve">Approve</a>
+<a href="{{ url_for('reject_job', job_id=job.id) }}" class="action-btn reject">Reject</a>
+</td>
+</tr>
+{% else %}
+<tr><td colspan="4">No pending jobs</td></tr>
+{% endfor %}
+</table>
+</div>
 
-      {% for job in approved_jobs %}
-      <tr>
-        <td>{{ job.id }}</td>
-        <td>{{ job.title }}</td>
-        <td>{{ job.poster.email if job.poster else 'Unknown' }}</td>
-        <td>{{ job.created_at.strftime('%Y-%m-%d') }}</td>
-      </tr>
-      {% else %}
-      <tr><td colspan="4" style="text-align:center;">No approved jobs.</td></tr>
-      {% endfor %}
-    </table>
-  </div>
+<div id="approved" class="section">
+<h3>✅ Approved Jobs</h3>
+<table>
+<tr><th>ID</th><th>Title</th><th>Posted By</th><th>Date</th></tr>
+{% for job in approved_jobs %}
+<tr>
+<td>{{ job.id }}</td>
+<td>{{ job.title }}</td>
+<td>{{ job.poster.email }}</td>
+<td>{{ job.created_at.strftime('%Y-%m-%d') }}</td>
+</tr>
+{% else %}
+<tr><td colspan="4">No approved jobs</td></tr>
+{% endfor %}
+</table>
+</div>
 
-  <!-- REJECTED JOBS -->
-  <div id="rejected" class="section hidden">
-    <h3>❌ Rejected Jobs</h3>
+<div id="rejected" class="section">
+<h3>❌ Rejected Jobs</h3>
+<table>
+<tr><th>ID</th><th>Title</th><th>Posted By</th></tr>
+{% for job in rejected_jobs %}
+<tr>
+<td>{{ job.id }}</td>
+<td>{{ job.title }}</td>
+<td>{{ job.poster.email }}</td>
+</tr>
+{% else %}
+<tr><td colspan="3">No rejected jobs</td></tr>
+{% endfor %}
+</table>
+</div>
 
-    <table>
-      <tr>
-        <th>ID</th><th>Title</th><th>Posted By</th>
-      </tr>
+{% endif %}
 
-      {% for job in rejected_jobs %}
-      <tr>
-        <td>{{ job.id }}</td>
-        <td>{{ job.title }}</td>
-        <td>{{ job.poster.email if job.poster else 'Unknown' }}</td>
-      </tr>
-      {% else %}
-      <tr><td colspan="3" style="text-align:center;">No rejected jobs.</td></tr>
-      {% endfor %}
-    </table>
-  </div>
-
-  <!-- SUPPORT -->
-  <div id="support" class="section hidden">
-    <h3>📩 Customer Support</h3>
-
-    <table>
-      <tr>
-        <th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Action</th>
-      </tr>
-
-      {% for msg in messages %}
-      <tr>
-        <td>{{ msg.id }}</td>
-        <td>{{ msg.name }}</td>
-        <td>{{ msg.email }}</td>
-        <td>{{ msg.subject }}</td>
-        <td>{{ msg.message }}</td>
-        <td>{{ msg.status }}</td>
-
-        <td>
-          {% if msg.status != 'Resolved' %}
-          <a href="{{ url_for('admin_support_resolve', msg_id=msg.id) }}" class="action-btn approve">Resolve</a>
-          {% else %}
-          <a href="{{ url_for('admin_support_delete', msg_id=msg.id) }}" onclick="return confirm('Delete permanently?')" class="action-btn reject">
-            Delete
-          </a>
-          {% endif %}
-        </td>
-      </tr>
-      {% else %}
-      <tr><td colspan="7" style="text-align:center;">No messages found.</td></tr>
-      {% endfor %}
-    </table>
-  </div>
+<!-- ================= SUPPORT ================= -->
+{% if current_admin.has_permission('manage_support') or current_admin.is_super_admin %}
+<div id="support" class="section">
+<h3>📩 Support Messages</h3>
+<table>
+<tr><th>Name</th><th>Email</th><th>Message</th><th>Status</th></tr>
+{% for msg in messages %}
+<tr>
+<td>{{ msg.name }}</td>
+<td>{{ msg.email }}</td>
+<td>{{ msg.message }}</td>
+<td>{{ msg.status }}</td>
+</tr>
+{% else %}
+<tr><td colspan="4">No messages</td></tr>
+{% endfor %}
+</table>
+</div>
+{% endif %}
 
 </div>
 
 <script>
-function switchSection() {
-    const key = document.getElementById("sectionSelect").value;
-    document.querySelectorAll(".section").forEach(s => s.classList.add("hidden"));
-    document.getElementById(key).classList.remove("hidden");
+function switchSection(){
+  const select = document.getElementById("sectionSelect");
+  if(!select) return;
+
+  const value = select.value;
+  document.querySelectorAll(".section").forEach(s => s.style.display="none");
+
+  const active = document.getElementById(value);
+  if(active) active.style.display="block";
 }
+
+window.onload = switchSection;
 </script>
 
 {% endblock %}

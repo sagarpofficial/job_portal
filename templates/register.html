@@ -1,78 +1,199 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="form-container"
-     style="max-width:450px; margin:50px auto; background:#ffffff; padding:30px;
-            border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.12);">
+<style>
+/* ================= REGISTER PAGE ================= */
 
-  <h2 style="text-align:center; margin-bottom:20px; color:#1f2937;">Register</h2>
+.register-wrapper {
+  width: 100%;
+  min-height: calc(100vh - 120px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
 
-  <form method="POST" action="{{ url_for('register') }}" enctype="multipart/form-data">
+.register-card {
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
 
-    <label style="font-weight:600;">Full Name</label>
-    <input type="text" name="name" required style="margin-bottom:12px;" class="form-control">
+.register-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 20px;
+}
 
-    <label style="font-weight:600;">Email</label>
-    <input type="email" name="email" required style="margin-bottom:12px;" class="form-control">
+/* Inputs */
+.form-label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 6px;
+  display: block;
+}
 
-    <label style="font-weight:600;">Password</label>
-    <input type="password" name="password" required style="margin-bottom:12px;" class="form-control">
+.form-control {
+  width: 100%;
+  height: 46px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  padding: 10px 14px;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
 
-    <label style="font-weight:600;">Phone Number</label>
-    <input type="text" name="phone" required style="margin-bottom:12px;" class="form-control">
+textarea.form-control {
+  height: 90px;
+}
 
-    <label style="font-weight:600;">Date of Birth</label>
-    <input type="date" name="dob" required style="margin-bottom:12px;" class="form-control">
+.form-control:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.25);
+}
 
-    <label style="font-weight:600;">Gender</label>
-    <select name="gender" class="form-control" required style="margin-bottom:12px;">
-      <option value="">Select</option>
-      <option value="male">Male</option>
-      <option value="female">Female</option>
-      <option value="other">Other</option>
-    </select>
+/* Button */
+.register-btn {
+  width: 100%;
+  height: 48px;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
 
-    <label style="font-weight:600;">Address</label>
-    <textarea name="address" class="form-control" required style="margin-bottom:12px;"></textarea>
+.register-btn:hover {
+  opacity: 0.95;
+}
 
-    <hr style="margin:18px 0;">
+/* Footer link */
+.register-footer {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+}
 
-    <label style="font-weight:600;">Government ID Type</label>
-    <select name="gov_id_type" class="form-control" required style="margin-bottom:12px;">
-      <option value="">Select</option>
-      <option value="aadhaar">Aadhaar</option>
-      <option value="pan">PAN</option>
-      <option value="voter">Voter ID</option>
-    </select>
+.register-footer a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
 
-    <label style="font-weight:600;">Government ID Number</label>
-    <input type="text" name="gov_id_number" required style="margin-bottom:12px;" class="form-control">
+/* ================= MOBILE OPTIMIZATION ================= */
+@media (max-width: 768px) {
 
-    <label style="font-weight:600;">Upload ID Proof</label>
-    <input type="file" name="gov_id_file" required class="form-control"
-           accept=".jpg,.jpeg,.png,.pdf" style="margin-bottom:12px;">
+  .register-wrapper {
+    align-items: flex-start;
+    padding: 16px;
+  }
 
-    <hr style="margin:18px 0;">
+  .register-card {
+    padding: 24px 20px;
+    border-radius: 14px;
+  }
 
-    <label style="font-weight:600;">Register As</label>
-    <select name="role" class="form-control" required style="margin-bottom:12px;">
-      <option value="jobseeker">Job Seeker</option>
-      <option value="employer">Employer</option>
-    </select>
+  .register-title {
+    font-size: 22px;
+  }
 
-    <button type="submit"
-            style="background:#2563eb; color:white; padding:12px; border:none;
-                   border-radius:8px; width:100%; font-weight:600; font-size:16px;
-                   cursor:pointer; margin-top:10px;">
-      Register & Send OTP
-    </button>
-  </form>
+  .form-control {
+    height: 44px;
+    font-size: 14px;
+  }
 
-  <p style="text-align:center; margin-top:15px; font-size:14px; color:#4b5563;">
-    Already have an account?
-    <a href="{{ url_for('login') }}" style="color:#3b82f6;">Login</a>
-  </p>
+  textarea.form-control {
+    height: 80px;
+  }
 
+  .register-btn {
+    height: 46px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+}
+</style>
+
+<div class="register-wrapper">
+  <div class="register-card">
+
+    <div class="register-title">Register</div>
+
+    <form method="POST" action="{{ url_for('register') }}" enctype="multipart/form-data">
+
+      <label class="form-label">Full Name</label>
+      <input type="text" name="name" class="form-control" required>
+
+      <label class="form-label">Email</label>
+      <input type="email" name="email" class="form-control" required>
+
+      <label class="form-label">Password</label>
+      <input type="password" name="password" class="form-control" required>
+
+      <label class="form-label">Phone Number</label>
+      <input type="text" name="phone" class="form-control" required>
+
+      <label class="form-label">Date of Birth</label>
+      <input type="date" name="dob" class="form-control" required>
+
+      <label class="form-label">Gender</label>
+      <select name="gender" class="form-control" required>
+        <option value="">Select</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select>
+
+      <label class="form-label">Address</label>
+      <textarea name="address" class="form-control" required></textarea>
+
+      <hr>
+
+      <label class="form-label">Government ID Type</label>
+      <select name="gov_id_type" class="form-control" required>
+        <option value="">Select</option>
+        <option value="aadhaar">Aadhaar</option>
+        <option value="pan">PAN</option>
+        <option value="voter">Voter ID</option>
+      </select>
+
+      <label class="form-label">Government ID Number</label>
+      <input type="text" name="gov_id_number" class="form-control" required>
+
+      <label class="form-label">Upload ID Proof</label>
+      <input type="file" name="gov_id_file"
+             class="form-control"
+             accept=".jpg,.jpeg,.png,.pdf" required>
+
+      <hr>
+
+      <label class="form-label">Register As</label>
+      <select name="role" class="form-control" required>
+        <option value="jobseeker">Job Seeker</option>
+        <option value="employer">Employer</option>
+      </select>
+
+      <button type="submit" class="register-btn">
+        Register & Send OTP
+      </button>
+
+    </form>
+
+    <div class="register-footer">
+      Already have an account?
+      <a href="{{ url_for('login') }}">Login</a>
+    </div>
+
+  </div>
 </div>
 
 {% endblock %}

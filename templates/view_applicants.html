@@ -3,12 +3,12 @@
 
 <style>
 .applicant-card {
-    max-width: 750px;
-    margin: 25px auto;
+    max-width: 900px;
+    margin: 30px auto;
     background: white;
     padding: 25px;
     border-radius: 14px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
 }
 
 .title {
@@ -16,8 +16,8 @@
     font-weight: 700;
     color: #1f2937;
     border-bottom: 2px solid #2563eb;
-    padding-bottom: 8px;
-    margin-bottom: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 25px;
 }
 
 .table {
@@ -28,8 +28,7 @@
 .table th {
     background: #2563eb;
     color: white;
-    padding: 10px;
-    text-align: left;
+    padding: 12px;
     font-size: 14px;
 }
 
@@ -39,11 +38,21 @@
     font-size: 14px;
 }
 
-.no-applicants {
-    text-align: center;
-    color: #6b7280;
-    padding: 25px;
-    font-size: 18px;
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-pending { background:#fef3c7; color:#92400e; }
+.status-viewed { background:#dbeafe; color:#1e40af; }
+.status-selected { background:#dcfce7; color:#166534; }
+.status-rejected { background:#fee2e2; color:#991b1b; }
+
+.hidden-text {
+    color: #9ca3af;
+    font-style: italic;
 }
 
 .resume-link {
@@ -52,63 +61,76 @@
 }
 
 .back-btn {
+    margin-top: 25px;
     display: inline-block;
-    margin-top: 20px;
     padding: 10px 18px;
     background: #2563eb;
     color: white;
-    text-decoration: none;
     border-radius: 8px;
-    font-size: 14px;
-}
-
-.back-btn:hover {
-    background: #1e3a8a;
+    text-decoration: none;
 }
 </style>
 
-
 <div class="applicant-card">
-
     <div class="title">👥 Applicants for "{{ job.title }}"</div>
 
     {% if applicants %}
     <table class="table">
         <tr>
             <th>Name</th>
+            <th>Applied On</th>
+            <th>Status</th>
             <th>Email</th>
             <th>Phone</th>
             <th>Resume</th>
-            <th>Applied On</th>
+            <th>Action</th>
         </tr>
 
-        {% for a in applicants %}
+        {% for app in applicants %}
         <tr>
-            <td>{{ a.full_name }}</td>
-            <td>{{ a.email }}</td>
-            <td>{{ a.phone }}</td>
-            
+            <td>{{ app.full_name }}</td>
+            <td>{{ app.applied_at.strftime('%d %b %Y') }}</td>
+
             <td>
-                {% if a.resume %}
-                    <a class="resume-link" href="{{ url_for('static', filename='uploads/resumes/' ~ a.resume) }}" download>
-                        Download
-                    </a>
-                {% else %}
-                    N/A
-                {% endif %}
+                <span class="status-badge status-{{ app.status|lower }}">
+                    {{ app.status }}
+                </span>
             </td>
 
-            <td>{{ a.applied_at.strftime('%Y-%m-%d') }}</td>
+            {% if app.status in ['Viewed','Selected'] %}
+                <td>{{ app.email }}</td>
+                <td>{{ app.phone }}</td>
+                <td>
+                    {% if app.resume %}
+                        <a class="resume-link"
+                           href="{{ url_for('download_resume', filename=app.resume) }}">
+                           Download
+                        </a>
+                    {% endif %}
+                </td>
+            {% else %}
+                <td colspan="3" class="hidden-text">Hidden until viewed</td>
+            {% endif %}
+
+            <td>
+                {% if app.status not in ['Selected','Rejected'] %}
+                    <a href="{{ url_for('select_application', app_id=app.id) }}"
+                       style="color:green;font-weight:600;">Select</a>
+                    |
+                    <a href="{{ url_for('reject_application', app_id=app.id) }}"
+                       style="color:red;font-weight:600;">Reject</a>
+                {% else %}
+                    —
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
     </table>
-
     {% else %}
-        <p class="no-applicants">No one has applied yet.</p>
+        <p>No applications yet.</p>
     {% endif %}
 
-    <a href="{{ url_for('profile') }}" class="back-btn">← Back to Dashboard</a>
-
+    <a href="{{ url_for('profile') }}" class="back-btn">← Back to Profile</a>
 </div>
 
 {% endblock %}

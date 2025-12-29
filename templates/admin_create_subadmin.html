@@ -1,0 +1,81 @@
+{% extends "admin_base.html" %}
+{% block content %}
+
+<style>
+  .form-card {
+    max-width: 520px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  }
+
+  h2 {
+    text-align: center;
+    color: #1e3a8a;
+    margin-bottom: 25px;
+  }
+
+  label {
+    font-weight: 600;
+    margin-top: 12px;
+    display: block;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+  }
+
+  .btn-submit {
+    width: 100%;
+    margin-top: 25px;
+    padding: 12px;
+    background: #2563eb;
+    color: white;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .btn-submit:hover {
+    background: #1e40af;
+  }
+</style>
+
+<div class="form-card">
+  <h2>➕ Create Sub-Admin</h2>
+
+  <!-- ✅ FIXED FORM -->
+  <form method="POST" action="{{ url_for('admin_create_subadmin') }}">
+
+    <label>Full Name</label>
+    <input type="text" name="name" placeholder="Enter name" required>
+
+    <label>Email</label>
+    <input type="email" name="email" placeholder="Enter email" required>
+
+    <label>Password</label>
+    <input type="password" name="password" placeholder="Set password" required>
+
+    <label>Admin Role</label>
+    <select name="admin_role" required>
+      <option value="">-- Select Role --</option>
+      <option value="job_admin">Job Admin</option>
+      <option value="user_admin">User Admin</option>
+      <option value="support_admin">Support Admin</option>
+    </select>
+
+    <button type="submit" class="btn-submit">
+      Create Sub-Admin
+    </button>
+
+  </form>
+</div>
+
+{% endblock %}

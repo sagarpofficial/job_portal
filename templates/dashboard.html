@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+  <h2>Welcome, {{ current_user.name or "User" }}</h2>
+
+  <div class="stats-box">
+    <div class="stat-card">
+      <h3>{{ total_applications }}</h3>
+      <p>Total Applications</p>
+    </div>
+  </div>
+
+  <h4 style="margin-top:30px;">Recent Applications</h4>
+
+  {% if recent_applications %}
+    <table class="table">
+      <tr>
+        <th>Job</th>
+        <th>Company</th>
+        <th>Date</th>
+      </tr>
+      {% for app in recent_applications %}
+      <tr>
+        <td>{{ app.job.title }}</td>
+        <td>{{ app.job.company_name or "N/A" }}</td>
+        <td>{{ app.applied_at.strftime('%d %b %Y') }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>You have not applied to any jobs yet.</p>
+  {% endif %}
+</div>
+
+{% endblock %}
