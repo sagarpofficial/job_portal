@@ -50,6 +50,9 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+with app.app_context():
+    db.drop_all()
+    db.create_all()
 migrate = Migrate(app, db)
 
 # ================== ROLE–PERMISSION MAPPING ==================
@@ -342,6 +345,9 @@ def assign_permissions():
 
 
 # -------------------- MODELS --------------------
+from flask_login import UserMixin
+from datetime import datetime
+
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
 
@@ -352,12 +358,11 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(200), unique=True, nullable=False)
     password_hash = db.Column(db.String(300), nullable=True)
 
-    # ---------------- EXISTING FLAGS ----------------
+    # ---------------- FLAGS ----------------
     is_employer = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
-    # is_super_admin = db.Column(db.Boolean, default=False)
 
-    # ✅ ACTIVE / DEACTIVE (VERY IMPORTANT)
+    # ✅ ACTIVE / DEACTIVE
     is_active = db.Column(db.Boolean, default=True)
 
     # ---------------- ROLE SYSTEM ----------------
@@ -384,20 +389,25 @@ class User(UserMixin, db.Model):
     applications = db.relationship('Application', backref='applicant', lazy=True)
     jobs = db.relationship('Job', backref='poster', lazy=True)
 
-    # ---------------- METHODS ----------------
-    def set_password(self, pw):
-        self.password_hash = bcrypt.generate_password_hash(pw).decode('utf-8')
+    # ---------------- PASSWORD METHODS ----------------
+    def set_password(self, password):
+        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
-    def check_password(self, pw):
+    def check_password(self, password):
         if not self.password_hash:
             return False
-        return bcrypt.check_password_hash(self.password_hash, pw)
+        return bcrypt.check_password_hash(self.password_hash, password)
 
+    # ---------------- PERMISSION SYSTEM ----------------
     def has_permission(self, permission_name):
-        if self.is_super_admin:
+        # Admin has all permissions
+        if self.is_admin:
             return True
+
+        # Sub-admin permission check
         if not self.admin_role:
             return False
+
         return any(p.code == permission_name for p in self.admin_role.permissions)
 
 class EmployerProfile(db.Model):
