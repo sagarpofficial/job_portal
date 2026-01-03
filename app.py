@@ -355,7 +355,7 @@ class User(UserMixin, db.Model):
     # ---------------- EXISTING FLAGS ----------------
     is_employer = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
-    is_super_admin = db.Column(db.Boolean, default=False)
+    # is_super_admin = db.Column(db.Boolean, default=False)
 
     # ✅ ACTIVE / DEACTIVE (VERY IMPORTANT)
     is_active = db.Column(db.Boolean, default=True)
@@ -1384,7 +1384,7 @@ def admin_dashboard():
     # ---------------- SUB ADMINS ----------------
     subadmins = User.query.filter(
         User.is_admin == True,
-        User.is_super_admin == False,
+        # User.is_super_admin == False,
         User.is_active == True
     ).all()
 
